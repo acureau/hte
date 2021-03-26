@@ -64,7 +64,7 @@ Each line will contain a minimum of two arguments. The first is the label follow
     |
     |        Label:(PLACEHOLDER)
  
-__Multiple Inputs__
+__Multiple Inputs__  
 The input separator is ','. New lines via '\n' are supported, so you are free to categorize your inputs.
 
     _example.config-
@@ -72,7 +72,7 @@ The input separator is ','. New lines via '\n' are supported, so you are free to
          Label:(PLACEHOLDER),
          LabelTwo:(YOUGETIT)
          
-__Specified Input__
+__Specified Input__  
 If you'd like to specify an input field, you can do so with the '|' key. This is a flag that the input will be pre-filled, and whatever is typed after it will be used as input. Mutators can be used.
 
     _example.config-
