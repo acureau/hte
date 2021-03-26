@@ -1,4 +1,4 @@
-# HTE (HTML TEMPLATE EDITOR)
+# HTML TEMPLATE EDITOR
 HTE is a python script for creating HTML templates, which can be modified and output with user input.
 Core features include the following.
 
