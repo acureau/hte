@@ -12,6 +12,8 @@ def getTemplates():
 
 # Edit the requested template.
 def editTemplate(template):
+    previousLabels = {}
+
     def modifiers(string):
         # Modifier Toggles
         money = False
@@ -19,6 +21,7 @@ def editTemplate(template):
         numbers = False
         lowercase = False
         uppercase = False
+        variable = False
         if ("[$]" in string):
             money = True
             string = string.replace("[$]", "")
@@ -31,9 +34,20 @@ def editTemplate(template):
             uppercase = True
         if ("[l]" in string):
             lowercase = True
+        if ("[*" in string and "]" in string):
+            variable = True
         
         # Apply Modifiers
         letters = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"]
+        if (variable):
+            variables = string.count("[*")
+            while (variables > 0):
+                key = string.split("[*")[1].split("]")[0]
+                if (key in previousLabels):
+                    string = string.replace("[*" + key + "]", previousLabels[key])
+                else:
+                    string = string.replace("[*" + key + "]", "(Error: No Such Var)")
+                variables -= 1
         if (numbers):
             count = string.count("[#]")
             string = string.replace("[#]", "{}")
@@ -79,13 +93,21 @@ def editTemplate(template):
             if ('|' in str(config[key])):
                 userInput = config[key].split('|')[1]
                 userInput = modifiers(str(userInput))
-                html = html.replace(str(config[key].split('|')[0]), userInput)
-                print(str(key) + ": " + userInput)
+                optionalInput = input(str(key) + " (" + userInput + "): ")
+                if (len(optionalInput) == 0):
+                    previousLabels[str(key)] = userInput
+                    html = html.replace(str(config[key].split('|')[0]), userInput)
+                else:
+                    optionalInput = modifiers(str(optionalInput))
+                    previousLabels[str(key)] = optionalInput
+                    html = html.replace(str(config[key].split('|')[0]), optionalInput)
             else:
                 userInput = input(str(key) + ": ")
                 userInput = modifiers(str(userInput))
+                previousLabels[str(key)] = userInput
                 html = html.replace(str(config[key]), userInput)
-        
+        print(previousLabels)
+        exit()
         return(html)
     else:
         return("Invalid Template.")
