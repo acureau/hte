@@ -117,7 +117,7 @@ if (initialCommand == "help"):
 
         Input Modifiers (OPTIONAL)
         ---------------
-        (To be put before a input of your desired field.)
+        (To be put before a input of your desired label.)
         Ex.
             Money: [$][M]5/2 -> 2.50
 
@@ -126,6 +126,13 @@ if (initialCommand == "help"):
         [#] - Replace character with random digit 0-9.
         [L] - Replace character with random uppercase letter.
         [l] - Replace character with random lowercase letter.
+        [*] - Access a previous label from another. If 'F' = 0, [*F] = 0.
+
+
+        Misc Info
+        ---------
+         - Prefilled labels are displayed as '(content)' after the label,
+           pressing enter will use this value. Or you can choose not to.
     ''')
 elif (initialCommand == "new"):
     response = generate.newTemplate(templateName)

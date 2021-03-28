@@ -3,7 +3,7 @@ HTE is a python script for creating HTML templates, which can be modified and ou
 Core features include the following.
 
   - HTML Template Configs (Designed for sharing.)
-  - Input Mutators. Generate random characters, evaluate an expression, and format as currency.
+  - Input Mutators. Generate random characters, evaluate an expression, and format as currency. Filled labels are accessable from input.
   - Multiple Output Formats.
 
 ## Usage
@@ -35,7 +35,7 @@ __List of Commands__
 
         Input Modifiers (OPTIONAL)
         ---------------
-        (To be put before a input of your desired field.)
+        (To be put before a input of your desired label.)
         Ex.
             Money: [$][M]5/2 -> 2.50
 
@@ -44,6 +44,13 @@ __List of Commands__
         [#] - Replace character with random digit 0-9.
         [L] - Replace character with random uppercase letter.
         [l] - Replace character with random lowercase letter.
+        [*] - Access a previous label from another. If 'F' = 0, [*F] = 0.
+
+
+        Misc Info
+        ---------
+         - Prefilled labels are displayed as '(content)' after the label,
+           pressing enter will use this value. Or you can choose not to.
         
 ## Configs
 Configs must be named and structured very precisely. A new directory __name__ should be created in __./templates__ and inside of it two files placed, '__name__.html' and '__name__.config'. The easiest way to do this is by using the _new_ command.
