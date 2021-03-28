@@ -37,7 +37,7 @@ __List of Commands__
             name - Name of the template. (REQUIRED)
 
 
-        Input Modifiers (OPTIONAL)
+        Input Mutators (OPTIONAL)
         ---------------
         (To be put before a input of your desired label.)
         Ex.
