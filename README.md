@@ -28,6 +28,10 @@ __List of Commands__
             Options:
             name - Name of the template. (REQUIRED)
 
+        clone - Clones the template speficied.
+            Options:
+            name - Name of the template. (REQUIRED)
+
         del - Delete a template.
             Options:
             name - Name of the template. (REQUIRED)

@@ -133,3 +133,24 @@ def deleteTemplate(name):
         return("Deleted.")
     else:
         return("Does not Exist.")
+
+def cloneTemplate(name):
+    templates = getTemplates()
+    if (name in templates):
+        newName = str(input("Clone Name: "))
+        html = open("./templates/" + str(name) + "/" + str(name) + ".html", 'r')
+        config = open("./templates/" + str(name) + "/" + str(name) + ".config", 'r')
+        oHtml = html.read()
+        oConfig = config.read()
+        html.close()
+        config.close()
+        os.mkdir("./templates/" + str(newName))
+        html = open("./templates/" + str(newName) + "/" + str(newName) + ".html", 'w')
+        config = open("./templates/" + str(newName) + "/" + str(newName) + ".config", 'w')
+        html.write(oHtml)
+        config.write(oConfig)
+        html.close()
+        config.close()
+        return("Cloned.")
+    else:
+        return("Does not Exist.")

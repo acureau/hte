@@ -17,7 +17,7 @@ if (len(args) > 0):
     templateName = "None"
     options = {}
     deleteArgs(1)
-    if (initialCommand not in ["help", "gen", "new", "del", "list"]):
+    if (initialCommand not in ["help", "gen", "new", "del", "list", "clone"]):
         initialCommand = "Invalid"
     else:
         if (initialCommand == "gen"):
@@ -64,14 +64,7 @@ if (len(args) > 0):
             else:
                 initialCommand = "Invalid"
                 templateName = "None"
-        elif (initialCommand == "new"):
-            if not (len(args) == 1):
-                initialCommand = "Invalid"
-                templateName = "None"
-            else:
-                templateName = args[0]
-                deleteArgs(len(args))
-        elif (initialCommand == "del"):
+        elif (initialCommand == "new" or initialCommand == "clone" or initialCommand == "del"):
             if not (len(args) == 1):
                 initialCommand = "Invalid"
                 templateName = "None"
@@ -110,6 +103,10 @@ if (initialCommand == "help"):
             Options:
             name - Name of the template. (REQUIRED)
 
+        clone - Clones the template speficied.
+            Options:
+            name - Name of the template. (REQUIRED)
+
         del - Delete a template.
             Options:
             name - Name of the template. (REQUIRED)
@@ -139,6 +136,9 @@ elif (initialCommand == "new"):
     print("\n > " + response + "\n")
 elif (initialCommand == "del"):
     response = generate.deleteTemplate(templateName)
+    print("\n > " + response + "\n")
+elif (initialCommand == "clone"):
+    response = generate.cloneTemplate(templateName)
     print("\n > " + response + "\n")
 elif (initialCommand == "list"):
     response = generate.getTemplates()
