@@ -1,12 +1,15 @@
 import os
 import random
+from pathlib import Path
+
+currentDir = Path(__file__).parent.absolute()
 
 # Collect properly structured templates.
 def getTemplates():
     templates = []
-    possibleTemplates = (os.listdir("./templates"))
+    possibleTemplates = (os.listdir(str(currentDir) + "/templates"))
     for template in possibleTemplates:
-        if (os.path.exists("./templates/" + str(template) + "/" + str(template) + ".config") and os.path.exists("./templates/" + str(template) + "/" + str(template) + ".html") and len(os.listdir("./templates/" + template)) == 2):
+        if (os.path.exists(str(currentDir) + "/templates/" + str(template) + "/" + str(template) + ".config") and os.path.exists(str(currentDir) + "/templates/" + str(template) + "/" + str(template) + ".html") and len(os.listdir(str(currentDir) + "/templates/" + template)) == 2):
             templates.append(template)
     return(templates)
 
@@ -75,8 +78,8 @@ def editTemplate(template):
     templates = getTemplates()
     if (template in templates):
         # Load template files.
-        html = open("./templates/" + str(template) + "/" + str(template) + ".html", 'r').read()
-        rawConfig = open("./templates/" + str(template) + "/" + str(template) + ".config", 'r').read()
+        html = open(str(currentDir) + "/templates/" + str(template) + "/" + str(template) + ".html", 'r').read()
+        rawConfig = open(str(currentDir) + "/templates/" + str(template) + "/" + str(template) + ".config", 'r').read()
         config = {}
 
         # Parsing the config file.
@@ -106,8 +109,6 @@ def editTemplate(template):
                 userInput = modifiers(str(userInput))
                 previousLabels[str(key)] = userInput
                 html = html.replace(str(config[key]), userInput)
-        print(previousLabels)
-        exit()
         return(html)
     else:
         return("Invalid Template.")
@@ -117,9 +118,9 @@ def newTemplate(name):
     if (name in templates):
         return("Already Exists.")
     else:
-        os.mkdir("./templates/" + str(name))
-        html = open("./templates/" + str(name) + "/" + str(name) + ".html", 'w')
-        config = open("./templates/" + str(name) + "/" + str(name) + ".config", 'w')
+        os.mkdir(str(currentDir) + "/templates/" + str(name))
+        html = open(str(currentDir) + "/templates/" + str(name) + "/" + str(name) + ".html", 'w')
+        config = open(str(currentDir) + "/templates/" + str(name) + "/" + str(name) + ".config", 'w')
         html.close()
         config.close()
         return("Created.")
@@ -127,9 +128,9 @@ def newTemplate(name):
 def deleteTemplate(name):
     templates = getTemplates()
     if (name in templates):
-        os.remove("./templates/" + str(name) + "/" + str(name) + ".html")
-        os.remove("./templates/" + str(name) + "/" + str(name) + ".config")
-        os.rmdir("./templates/" + str(name))
+        os.remove(str(currentDir) + "/templates/" + str(name) + "/" + str(name) + ".html")
+        os.remove(str(currentDir) + "/templates/" + str(name) + "/" + str(name) + ".config")
+        os.rmdir(str(currentDir) + "/templates/" + str(name))
         return("Deleted.")
     else:
         return("Does not Exist.")
@@ -138,15 +139,15 @@ def cloneTemplate(name):
     templates = getTemplates()
     if (name in templates):
         newName = str(input("Clone Name: "))
-        html = open("./templates/" + str(name) + "/" + str(name) + ".html", 'r')
-        config = open("./templates/" + str(name) + "/" + str(name) + ".config", 'r')
+        html = open(str(currentDir) + "/templates/" + str(name) + "/" + str(name) + ".html", 'r')
+        config = open(str(currentDir) + "/templates/" + str(name) + "/" + str(name) + ".config", 'r')
         oHtml = html.read()
         oConfig = config.read()
         html.close()
         config.close()
-        os.mkdir("./templates/" + str(newName))
-        html = open("./templates/" + str(newName) + "/" + str(newName) + ".html", 'w')
-        config = open("./templates/" + str(newName) + "/" + str(newName) + ".config", 'w')
+        os.mkdir(str(currentDir) + "/templates/" + str(newName))
+        html = open(str(currentDir) + "/templates/" + str(newName) + "/" + str(newName) + ".html", 'w')
+        config = open(str(currentDir) + "/templates/" + str(newName) + "/" + str(newName) + ".config", 'w')
         html.write(oHtml)
         config.write(oConfig)
         html.close()

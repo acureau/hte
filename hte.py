@@ -2,6 +2,9 @@ import generate
 import output
 import sys
 import os
+from pathlib import Path
+
+currentDir = Path(__file__).parent.absolute()
 
 # Validate Arguments.
 args = sys.argv
@@ -147,7 +150,7 @@ elif (initialCommand == "list"):
         print(" > " + name)
     print("\n")
 elif (initialCommand == "gen"):
-    outputDir = "./output"
+    outputDir = str(currentDir) + "/output"
     outputFormat = "html"
     for option in options:
         if (option == "-o"):
