@@ -14,7 +14,7 @@ def getTemplates():
     return(templates)
 
 # Edit the requested template.
-def editTemplate(template):
+def editTemplate(template, mode):
     previousLabels = {}
 
     def modifiers(string):
@@ -86,30 +86,127 @@ def editTemplate(template):
         fields = rawConfig.split(',\n')
         for field in fields:
             field = field.replace('\n', '')
-        for field in fields:
             if(':' in field):
                 keyPair = field.split(':')
                 config[keyPair[0]] = keyPair[1]
         
-        # Replacing the values in HTML string.
-        for key in config:
-            if ('|' in str(config[key])):
-                userInput = config[key].split('|')[1]
-                userInput = modifiers(str(userInput))
-                optionalInput = input(str(key) + " (" + userInput + "): ")
-                if (len(optionalInput) == 0):
-                    previousLabels[str(key)] = userInput
-                    html = html.replace(str(config[key].split('|')[0]), userInput)
+        if (mode == "gen"):
+            # Replacing the values in HTML string.
+            for key in config:
+                if ('|' in str(config[key])):
+                    userInput = config[key].split('|')[1]
+                    userInput = modifiers(str(userInput))
+                    optionalInput = input(str(key) + " (" + userInput + "): ")
+                    if (len(optionalInput) == 0):
+                        previousLabels[str(key)] = userInput
+                        html = html.replace(str(config[key].split('|')[0]), userInput)
+                    else:
+                        optionalInput = modifiers(str(optionalInput))
+                        previousLabels[str(key)] = optionalInput
+                        html = html.replace(str(config[key].split('|')[0]), optionalInput)
                 else:
-                    optionalInput = modifiers(str(optionalInput))
-                    previousLabels[str(key)] = optionalInput
-                    html = html.replace(str(config[key].split('|')[0]), optionalInput)
-            else:
-                userInput = input(str(key) + ": ")
-                userInput = modifiers(str(userInput))
-                previousLabels[str(key)] = userInput
-                html = html.replace(str(config[key]), userInput)
-        return(html)
+                    userInput = input(str(key) + ": ")
+                    userInput = modifiers(str(userInput))
+                    previousLabels[str(key)] = userInput
+                    html = html.replace(str(config[key]), userInput)
+            return(html)
+        else: # Mode is test.
+            errorsFound = False
+            print("\n")
+
+            def parseKeys(keys):
+                parsedKeys = []
+                for key in keys:
+                    if ("|" in key):
+                        parsedKeys.append(key.split("|")[0])
+                    else:
+                        parsedKeys.append(key)
+                return(parsedKeys)
+
+            # Parse the config file.
+            labels = []
+            keys = []
+            lines = rawConfig.split(',\n')
+            for line in lines:
+                line = line.replace('\n', '')
+                split = line.split(':')
+                labels.append(split[0])
+                keys.append(split[1])
+
+            # Check for duplicate labels and keys.
+            duplicates = []
+            while (len(labels) > 0):
+                currentLabel = labels[0]
+                if (labels.count(currentLabel) > 1 and duplicates.count(currentLabel) == 0):
+                    duplicates.append(currentLabel)
+                labels.remove(currentLabel)
+            if (len(duplicates) > 0):
+                errorsFound = True
+                for dupe in duplicates:
+                    print(" > '" + dupe + "' is a duplicate label.")
+
+            duplicates = []
+            parsedKeys = parseKeys(keys)
+            while (len(parsedKeys) > 0):
+                currentKey = parsedKeys[0]
+                if ((not str(currentKey) in str(html)) and duplicates.count(currentKey) == 0):
+                    errorsFound = True
+                    print(" > '" + currentKey + "' is not found in HTML.")
+                if (parsedKeys.count(currentKey) > 1 and duplicates.count(currentKey) == 0):
+                    duplicates.append(currentKey)
+                parsedKeys.remove(currentKey)
+            if (len(duplicates) > 0):
+                errorsFound = True
+                for dupe in duplicates:
+                    print(" > '" + dupe + "' is a duplicate key.")
+            
+            if (not errorsFound):
+                toPrint = {}
+                for key in config:
+                    if ("|" in config[key]):
+                        toPrint[key] = config[key].split("|")[1]
+                for key in toPrint:
+                    if (not "[*" in toPrint[key]):
+                        value = modifiers(toPrint[key])
+                        previousLabels[key] = value
+                for key in previousLabels:
+                    if (key in toPrint):
+                        del toPrint[key]
+                        
+                needInput = []
+                for key in toPrint:
+                    string = toPrint[key]
+                    variables = string.count("[*")
+                    while (variables > 0):
+                        var = string.split("[*")[1].split("]")[0]
+                        if (not var in previousLabels):
+                            if (var in config):
+                                needInput.append(var)
+                            else:
+                                errorsFound = True
+                                print(" > '" + var + "' is not an existing label, and can not be accessed.")
+                        variables -= 1
+                
+                if (len(needInput) > 0):
+                    if (errorsFound):
+                        print(" > The following labels are required for testing.")
+                    else:
+                        print(" > The following labels are required for testing.")
+                    for label in needInput:
+                        value = input("   " + label + ": ")
+                        previousLabels[label] = value
+
+                for key in toPrint:
+                    value = modifiers(toPrint[key])
+                    previousLabels[key] = value
+
+                if (len(previousLabels) > 0):
+                    for key in previousLabels:
+                        print(" > " + key + ": " + previousLabels[key])
+
+            if (not errorsFound):
+                print(" > No errors found.")
+            print("\n")
     else:
         return("Invalid Template.")
 
