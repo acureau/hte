@@ -94,4 +94,4 @@ If you'd like to specify an input field, you can do so with the '|' key. This is
 
          Label:(PLACEHOLDER),
          LabelTwo:(YOUGETIT),
-         LabelThree:(PHONE)|([#][#][#]) [#][#][#][#]-[#][#][#][#]
+         LabelThree:(PHONE)|([#][#][#]) [#][#][#]-[#][#][#][#]
