@@ -20,7 +20,7 @@ if (len(args) > 0):
     templateName = "None"
     options = {}
     deleteArgs(1)
-    if (initialCommand not in ["help", "gen", "new", "del", "list", "clone"]):
+    if (initialCommand not in ["help", "gen", "new", "del", "list", "clone", "test"]):
         initialCommand = "Invalid"
     else:
         if (initialCommand == "gen"):
@@ -67,7 +67,7 @@ if (len(args) > 0):
             else:
                 initialCommand = "Invalid"
                 templateName = "None"
-        elif (initialCommand == "new" or initialCommand == "clone" or initialCommand == "del"):
+        elif (initialCommand == "new" or initialCommand == "clone" or initialCommand == "del" or initialCommand == "test"):
             if not (len(args) == 1):
                 initialCommand = "Invalid"
                 templateName = "None"
@@ -101,6 +101,10 @@ if (initialCommand == "help"):
             -d dir - The output directory. (OPTIONAL)
             -o format - The output format. (OPTIONAL)
                 (png, html, pdf)
+
+        test - Test a template for misconfigurations, and pre-filled labels.
+            Options:
+            name - Name of the template. (REQUIRED)
 
         new - Create a new empty template.
             Options:
@@ -149,17 +153,19 @@ elif (initialCommand == "list"):
     for name in response:
         print(" > " + name)
     print("\n")
-elif (initialCommand == "gen"):
-    outputDir = str(currentDir) + "/output"
-    outputFormat = "html"
-    for option in options:
-        if (option == "-o"):
-            outputFormat = options[option]
-        if (option == "-d"):
-            outputDir = options[option]
-
-    html = generate.editTemplate(templateName)
-    output.output(outputDir, outputFormat, html)
+elif (initialCommand == "gen" or initialCommand == "test"):
+    if (initialCommand == "gen"):
+        outputDir = str(currentDir) + "/output"
+        outputFormat = "html"
+        for option in options:
+            if (option == "-o"):
+                outputFormat = options[option]
+            if (option == "-d"):
+                outputDir = options[option]
+        html = generate.editTemplate(templateName, "gen")
+        output.output(outputDir, outputFormat, html)
+    else:
+        html = generate.editTemplate(templateName, "test")
     
 else:
     print("\n > Invalid statement. Try 'help'.\n")

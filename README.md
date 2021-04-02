@@ -24,6 +24,10 @@ __List of Commands__
             -o format - The output format. (OPTIONAL)
                 (png, html, pdf)
 
+        test - Test a template for misconfigurations, and pre-filled labels.
+            Options:
+            name - Name of the template. (REQUIRED)
+
         new - Create a new empty template.
             Options:
             name - Name of the template. (REQUIRED)
@@ -90,4 +94,4 @@ If you'd like to specify an input field, you can do so with the '|' key. This is
 
          Label:(PLACEHOLDER),
          LabelTwo:(YOUGETIT),
-         LabelThree:(PHONE)|([#][#][#]) [#][#][#][#]-[#][#][#][#]
+         LabelThree:(PHONE)|([#][#][#]) [#][#][#]-[#][#][#][#]
