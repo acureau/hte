@@ -20,7 +20,8 @@ def editTemplate(template, mode):
     def modifiers(string):
         # Modifier Toggles
         money = False
-        math = False
+        math_open = False
+        math_close = False
         numbers = False
         lowercase = False
         uppercase = False
@@ -29,8 +30,11 @@ def editTemplate(template, mode):
             money = True
             string = string.replace("[$]", "")
         if ("[M]" in string):
-            math = True
-            string = string.replace("[M]", "")
+            math_open = True
+            string = string.replace("[M]", "(")
+        if ("[/M]" in string):
+            math_close = True
+            string = string.replace("[/M]", ")")
         if ("[#]" in string):
             numbers = True
         if ("[L]" in string):
@@ -63,7 +67,7 @@ def editTemplate(template, mode):
             count = string.count("[L]")
             string = string.replace("[L]", "{}")
             string = string.format(*(random.choice(letters).upper() for _ in range(count)))
-        if (math):
+        if (math_open or math_close):
             try:
                 string = str(eval(string))
             except:
