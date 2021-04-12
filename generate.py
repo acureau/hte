@@ -78,7 +78,7 @@ def editTemplate(template, mode):
             try:
                 string = ("{:.2f}".format(float(string)))
             except:
-                string = stringr
+                string = string
         return(string)
 
     templates = getTemplates()
