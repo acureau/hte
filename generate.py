@@ -1,6 +1,7 @@
 import os
 import random
 from pathlib import Path
+import re
 
 currentDir = Path(__file__).parent.absolute()
 
@@ -30,7 +31,6 @@ def editTemplate(template, mode):
             string = string.replace("[$]", "")
         if ("[M]" in string):
             math = True
-            string = string.replace("[M]", "")
         if ("[#]" in string):
             numbers = True
         if ("[L]" in string):
@@ -65,7 +65,13 @@ def editTemplate(template, mode):
             string = string.format(*(random.choice(letters).upper() for _ in range(count)))
         if (math):
             try:
-                string = str(eval(string))
+                if ("[/M]" in string):
+                    expression = re.search(r"\[M\](.*)\[\/M\]", string).group(0)
+                    result = str(eval(expression[3:-4]))
+                    string = re.sub(r"\[M\].*\[\/M\]", result, string)
+                else:
+                    string = string.replace("[M]", "")
+                    string = str(eval(string))
             except:
                 string = string
         if (money):
